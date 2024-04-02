@@ -9,7 +9,11 @@ export default {
     extend: {
       colors: {
         mainBg: '#EDF2FF',
-
+        darkViolet: '#14152C',
+        clairPink: '#858691',
+      },
+      backgroundColor: {
+        'main-bg-image': "url('/assets/security.jpg')"
       }
     },
   },
