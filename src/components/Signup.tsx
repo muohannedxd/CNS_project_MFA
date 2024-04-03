@@ -6,6 +6,9 @@ import { NavLink } from "react-router-dom";
 
 export default function Signup() {
 
+  /**
+   * form props
+   */
   const [showPassword, setShowPassword] = useState(false);
   const [showConfitmPassword, setShowConfirmPassword] = useState(false)
 
@@ -15,6 +18,14 @@ export default function Signup() {
   const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
   };
+
+  /**
+   * form control
+   */
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [confPassword, setConfPassword] = useState('')
 
   return (
     <div className="flex flex-col items-center justify-center">
@@ -27,16 +38,12 @@ export default function Signup() {
           fullWidth
           required
           id="outlined-required"
-          label="First Name"
-          placeholder="Basheer"
-        />
-
-        <TextField
-          fullWidth
-          required
-          id="outlined-required"
-          label="Last Name"
-          placeholder="Hmida"
+          label="Full Name"
+          placeholder="Basheer Abbas"
+          value={name}
+          onChange={(event) => {
+            setName(event.target.value)
+          }}
         />
 
         <TextField
@@ -45,7 +52,11 @@ export default function Signup() {
           required
           id="outlined-required"
           label="Email"
-          placeholder="hmida.basheer@gmail.com"
+          placeholder="abbas.basheer@gmail.com"
+          value={email}
+          onChange={(event) => {
+            setEmail(event.target.value)
+          }}
         />
 
         <FormControl variant="outlined">
@@ -67,6 +78,10 @@ export default function Signup() {
             }
             fullWidth
             label="Password *"
+            value={password}
+            onChange={(event) => {
+              setPassword(event.target.value)
+            }}
           />
         </FormControl>
 
@@ -89,6 +104,10 @@ export default function Signup() {
             }
             fullWidth
             label="Confirm Password *"
+            value={confPassword}
+            onChange={(event) => {
+              setConfPassword(event.target.value)
+            }}
           />
         </FormControl>
 

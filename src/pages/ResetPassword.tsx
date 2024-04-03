@@ -9,6 +9,9 @@ export default function ResetPassword() {
 
   let name = 'Mohanned Kadache'
 
+  /**
+   * form props
+   */
   const [showPassword, setShowPassword] = useState(false);
   const [showConfitmPassword, setShowConfirmPassword] = useState(false)
 
@@ -19,16 +22,23 @@ export default function ResetPassword() {
     event.preventDefault();
   };
 
+  /**
+   * form control
+   */
+  const [password, setPassword] = useState('')
+  const [confPassword, setConfPassword] = useState('')
+
+
   return (
     <div className="flex justify-center items-center mt-60 sm:mx-0 md:mx-8 lg:mx-60 xl:mx-96">
       <Card sx={{ p: 4, width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <Box component='form' className="flex flex-col w-[90%] mx-8 my-8 gap-2" >
 
           <img src={Logo} alt="logo" style={{ width: 60, height: 60, alignSelf: 'center' }} />
-          <Typography variant="inherit" fontSize={40} component="div" style={{textAlign: 'center'}}>
+          <Typography variant="inherit" fontSize={40} component="div" style={{ textAlign: 'center' }}>
             {name}
           </Typography>
-          <Typography variant="inherit" fontSize={18} style={{textAlign: 'center'}}>
+          <Typography variant="inherit" fontSize={18} style={{ textAlign: 'center' }}>
             Enter your new password
           </Typography>
 
@@ -53,6 +63,10 @@ export default function ResetPassword() {
               }
               fullWidth
               label="Password *"
+              value={password}
+              onChange={(event) => {
+                setPassword(event.target.value)
+              }}
             />
           </FormControl>
 
@@ -75,8 +89,14 @@ export default function ResetPassword() {
               }
               fullWidth
               label="Confirm Password *"
+              value={confPassword}
+              onChange={(event) => {
+                setConfPassword(event.target.value)
+              }}
             />
           </FormControl>
+
+          {password} {confPassword}
 
           <NavLink to='/main' className='mt-6'>
             <Button variant="contained" style={{ backgroundColor: "#14152C", fontFamily: 'Oswald', width: '100%' }} size="large"> Save </Button>

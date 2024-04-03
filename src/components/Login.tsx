@@ -7,6 +7,9 @@ import { NavLink } from 'react-router-dom';
 
 export default function Login() {
 
+  /**
+   * form props
+   */
   const [showPassword, setShowPassword] = useState(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -14,6 +17,12 @@ export default function Login() {
   const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
   };
+
+  /**
+   * form control
+   */
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
 
 
   return (
@@ -29,7 +38,11 @@ export default function Login() {
           required
           id="outlined-required"
           label="Email"
-          placeholder="hmida.basheer@gmail.com"
+          placeholder="abbas.basheer@gmail.com"
+          value={email}
+          onChange={(event) => {
+            setEmail(event.target.value)
+          }}
         />
 
         <FormControl variant="outlined">
@@ -51,6 +64,10 @@ export default function Login() {
             }
             fullWidth
             label="Password *"
+            value={password}
+            onChange={(event) => {
+              setPassword(event.target.value)
+            }}
           />
         </FormControl>
 

@@ -9,6 +9,9 @@ export default function Validate() {
 
   let name = 'Mohanned Kadache'
 
+  /**
+   * form control
+   */
   const [otp, setOtp] = useState('')
   const handleChange = (newValue: string) => {
     setOtp(newValue);
