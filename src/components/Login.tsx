@@ -1,8 +1,11 @@
 import { EmailRounded, Visibility, VisibilityOff } from "@mui/icons-material";
-import { Box, Button, Divider, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField } from "@mui/material";
-import { useState } from "react";
+import { Box, Button, Divider, FormControl, FormHelperText, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField } from "@mui/material";
+import { ChangeEvent, useState } from "react";
 import Logo from './../assets/logo.png'
-import { NavLink } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+const PASSWORD_REGEX = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!.@#$%^&* ]).{8,}$/
 
 
 export default function Login() {
@@ -24,6 +27,62 @@ export default function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
+  /**
+   * form validation
+   */
+  // email
+  const [isValidEmail, setValidEmail] = useState(false)
+  const [isFilledEmail, setFilledEmail] = useState(false)
+  const handleEmailChange = (event: ChangeEvent<HTMLInputElement>) => {
+    event.preventDefault()
+    const newEmail = event.target.value
+    setEmail(newEmail)
+    if (newEmail !== '') {
+      setFilledEmail(true)
+      if (EMAIL_REGEX.test(newEmail)) {
+        setValidEmail(true)
+      } else {
+        setValidEmail(false)
+      }
+    } else {
+      setFilledEmail(false)
+    }
+  }
+
+  // password
+  const [isValidPassword, setValidPassword] = useState(false)
+  const [isFilledPassword, setFilledPassword] = useState(false)
+  const handlePasswordChange = (event: ChangeEvent<HTMLInputElement>) => {
+    event.preventDefault()
+    const newPass = event.target.value
+    setPassword(newPass)
+    if (newPass !== '') {
+      setFilledPassword(true)
+      if (PASSWORD_REGEX.test(newPass)) {
+        setValidPassword(true)
+      } else {
+        setValidPassword(false)
+      }
+    } else {
+      setFilledPassword(false)
+    }
+  }
+
+  /**
+   * form submission
+   */
+  const [isClicked, setClicked] = useState(false)
+  const navigator = useNavigate()
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault()
+    setClicked(true)
+    if (isValidEmail && isValidPassword) {
+      navigator('/validate')
+    } else {
+      // nothing
+    }
+  }
+
 
   return (
     <div className="flex flex-col items-center justify-center">
@@ -32,18 +91,22 @@ export default function Login() {
 
       <Box component='form' className="flex flex-col w-[90%] mx-8 my-8 gap-6">
 
-        <TextField
-          type="email"
-          fullWidth
-          required
-          id="outlined-required"
-          label="Email"
-          placeholder="abbas.basheer@gmail.com"
-          value={email}
-          onChange={(event) => {
-            setEmail(event.target.value)
-          }}
-        />
+        <FormControl variant="standard">
+          <TextField
+            type="email"
+            fullWidth
+            required
+            id="outlined-required"
+            label="Email"
+            placeholder="abbas.basheer@gmail.com"
+            value={email}
+            onChange={handleEmailChange}
+            error={(!isValidEmail && isFilledEmail) || (isClicked && !isFilledEmail)}
+          />
+          {(isFilledEmail && !isValidEmail) &&
+            <FormHelperText style={{ color: '#C92A2A' }}>Invalid Email Address</FormHelperText>
+          }
+        </FormControl>
 
         <FormControl variant="outlined">
           <InputLabel htmlFor="outlined-adornment-password">Password *</InputLabel>
@@ -65,19 +128,20 @@ export default function Login() {
             fullWidth
             label="Password *"
             value={password}
-            onChange={(event) => {
-              setPassword(event.target.value)
-            }}
+            onChange={handlePasswordChange}
+            error={(!isValidPassword && isFilledPassword) || (isClicked && !isFilledPassword)}
           />
+          {(isFilledPassword && !isValidPassword) &&
+            <FormHelperText style={{ color: '#C92A2A', marginLeft: -1 }}>Password must be 8 characters at least that contain one uppercase and special character</FormHelperText>
+          }
+
         </FormControl>
 
-        <NavLink to='/validate'>
-          <Button variant="contained" size="large"
-            style={{ backgroundColor: "#14152C", fontFamily: 'Oswald', width: '100%' }}
-          >
-            Login
-          </Button>
-        </NavLink>
+        <Button variant="contained" size="large" onClick={handleClick}
+          style={{ backgroundColor: "#14152C", fontFamily: 'Oswald', width: '100%' }}
+        >
+          Login
+        </Button>
         {
           /**
            *    <LoadingButton loading variant="outlined" size="large">

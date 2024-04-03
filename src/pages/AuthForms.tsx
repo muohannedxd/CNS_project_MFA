@@ -39,7 +39,7 @@ export default function AuthForms() {
   }
 
   return (
-    <div className="flex justify-center items-center my-24 sm:mx-0 md:mx-16 lg:mx-60 xl:mx-96">
+    <div className="flex justify-center items-center my-24 sm:mx-8 md:mx-16 lg:mx-60 xl:mx-96">
       <Box sx={{ width: '100%', bgcolor: 'background.paper', borderRadius: 2, fontFamily: 'Oswald' }} >
         <Tabs value={value} onChange={handleChange}
           centered indicatorColor="secondary" variant="fullWidth"

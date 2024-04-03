@@ -1,8 +1,10 @@
-import { Box, Button, Card, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, Typography } from "@mui/material";
+import { Box, Button, Card, FormControl, FormHelperText, IconButton, InputAdornment, InputLabel, OutlinedInput, Typography } from "@mui/material";
 import Logo from './../assets/logo.png'
-import { NavLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
+
+const PASSWORD_REGEX = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!.@#$%^&* ]).{8,}$/
 
 
 export default function ResetPassword() {
@@ -28,9 +30,69 @@ export default function ResetPassword() {
   const [password, setPassword] = useState('')
   const [confPassword, setConfPassword] = useState('')
 
+  /**
+   * form validation
+   */
+  // password
+  const [isValidPassword, setValidPassword] = useState(false)
+  const [isFilledPassword, setFilledPassword] = useState(false)
+  const handlePasswordChange = (event: ChangeEvent<HTMLInputElement>) => {
+    event.preventDefault()
+    const newPass = event.target.value
+    setPassword(newPass)
+    if (newPass !== '') {
+      setFilledPassword(true)
+      if (PASSWORD_REGEX.test(newPass)) {
+        setValidPassword(true)
+      } else {
+        setValidPassword(false)
+      }
+      if (newPass !== confPassword) {
+        setValidConf(false)
+      } else {
+        setValidConf(true)
+      }
+    } else {
+      setFilledPassword(false)
+    }
+  }
+
+  // confirmation
+  const [isValidConf, setValidConf] = useState(false)
+  const [isFilledConf, setFilledConf] = useState(false)
+  const handleConfirmationChange = (event: ChangeEvent<HTMLInputElement>) => {
+    event.preventDefault()
+    const newConf = event.target.value
+    setConfPassword(newConf)
+    if (newConf !== '') {
+      setFilledConf(true)
+      if (newConf === password) {
+        setValidConf(true)
+      } else {
+        setValidConf(false)
+      }
+    } else {
+      setFilledConf(false)
+    }
+  }
+
+  /**
+  * form submission
+  */
+  const [isClicked, setClicked] = useState(false)
+  const navigator = useNavigate()
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault()
+    setClicked(true)
+    if (isValidPassword && isValidConf) {
+      navigator('/main')
+    } else {
+      // nothing
+    }
+  }
 
   return (
-    <div className="flex justify-center items-center mt-60 sm:mx-0 md:mx-8 lg:mx-60 xl:mx-96">
+    <div className="flex justify-center items-center mt-60 sm:mx-8 md:mx-8 lg:mx-60 xl:mx-96">
       <Card sx={{ p: 4, width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <Box component='form' className="flex flex-col w-[90%] mx-8 my-8 gap-2" >
 
@@ -64,10 +126,13 @@ export default function ResetPassword() {
               fullWidth
               label="Password *"
               value={password}
-              onChange={(event) => {
-                setPassword(event.target.value)
-              }}
+              onChange={handlePasswordChange}
+              error={(!isValidPassword && isFilledPassword) || (isClicked && !isFilledPassword)}
             />
+            {(isFilledPassword && !isValidPassword) &&
+              <FormHelperText style={{ color: '#C92A2A', marginLeft: -1 }}>Password must be 8 characters at least that contain one uppercase and special character</FormHelperText>
+            }
+
           </FormControl>
 
           <FormControl variant="outlined">
@@ -90,17 +155,19 @@ export default function ResetPassword() {
               fullWidth
               label="Confirm Password *"
               value={confPassword}
-              onChange={(event) => {
-                setConfPassword(event.target.value)
-              }}
+              onChange={handleConfirmationChange}
+              error={(!isValidConf && isFilledConf) || (isClicked && !isFilledConf)}
             />
+            {(isFilledConf && !isValidConf) &&
+              <FormHelperText style={{ color: '#C92A2A', marginLeft: -1 }}>Confirmation must match the password</FormHelperText>
+            }
           </FormControl>
 
-          {password} {confPassword}
-
-          <NavLink to='/main' className='mt-6'>
-            <Button variant="contained" style={{ backgroundColor: "#14152C", fontFamily: 'Oswald', width: '100%' }} size="large"> Save </Button>
-          </NavLink>
+          <Button
+            variant="contained" size="large" onClick={handleClick}
+            style={{ backgroundColor: "#14152C", fontFamily: 'Oswald', width: '100%', marginTop: 16 }}>
+            Save
+          </Button>
 
         </Box>
       </Card>
