@@ -2,6 +2,7 @@ import { EmailRounded, Visibility, VisibilityOff } from "@mui/icons-material";
 import { Box, Button, Divider, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField } from "@mui/material";
 import { useState } from "react";
 import Logo from './../assets/logo.png'
+import { NavLink } from 'react-router-dom';
 
 
 export default function Login() {
@@ -14,10 +15,11 @@ export default function Login() {
     event.preventDefault();
   };
 
+
   return (
     <div className="flex flex-col items-center justify-center">
-      
-      <img src={Logo} alt="logo" style={{width: 60, height: 60}} />
+
+      <img src={Logo} alt="logo" style={{ width: 60, height: 60 }} />
 
       <Box component='form' className="flex flex-col w-[90%] mx-8 my-8 gap-6">
 
@@ -52,11 +54,13 @@ export default function Login() {
           />
         </FormControl>
 
-        <Button variant="contained" size="large"
-          style={{ backgroundColor: "#14152C" }}
-        >
-          Login
-        </Button>
+        <NavLink to='/validate'>
+          <Button variant="contained" size="large"
+            style={{ backgroundColor: "#14152C", fontFamily: 'Oswald', width: '100%' }}
+          >
+            Login
+          </Button>
+        </NavLink>
         {
           /**
            *    <LoadingButton loading variant="outlined" size="large">
@@ -69,7 +73,7 @@ export default function Login() {
           sx={{ m: 4 }}
         > Or continue with </Divider>
 
-        <Button variant="outlined" style={{borderColor: '#C92A2A', color: '#C92A2A'}} size="large" startIcon={<EmailRounded />}>
+        <Button variant="outlined" style={{ borderColor: '#C92A2A', color: '#C92A2A', fontFamily: 'Oswald' }} size="large" startIcon={<EmailRounded />}>
           Google Account
         </Button>
 

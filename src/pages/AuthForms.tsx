@@ -40,12 +40,12 @@ export default function AuthForms() {
 
   return (
     <div className="flex justify-center items-center my-24 sm:mx-0 md:mx-16 lg:mx-60 xl:mx-96">
-      <Box sx={{ width: '100%', bgcolor: 'background.paper' }} >
+      <Box sx={{ width: '100%', bgcolor: 'background.paper', borderRadius: 2, fontFamily: 'Oswald' }} >
         <Tabs value={value} onChange={handleChange}
           centered indicatorColor="secondary" variant="fullWidth"
           textColor='inherit' className="text-darkViolet">
-          <Tab label="Register" />
-          <Tab label="Login" />
+          <Tab label="Register" style={{fontFamily: 'Oswald'}} />
+          <Tab label="Login" style={{fontFamily: 'Oswald'}} />
         </Tabs>
         <CustomTabPanel value={value} index={0}>
           <Signup />

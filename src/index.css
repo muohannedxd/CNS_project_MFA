@@ -10,10 +10,13 @@ html {
 }
 
 html {
-  font-family: "Oswald", sans-serif;
-  font-weight: 600;
-  font-style: normal;
   background: linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75)), url('/src/assets/security.jpg');
   background-repeat: no-repeat;
   background-size: cover;
+}
+
+* {
+  font-family: "Oswald", sans-serif;
+  font-weight: 400;
+  font-style: normal;
 }
