@@ -7,8 +7,6 @@ import { MuiOtpInput } from 'mui-one-time-password-input'
 
 export default function Validate() {
 
-  let name = 'Mohanned Kadache'
-
   /**
    * form control
    */
@@ -39,7 +37,7 @@ export default function Validate() {
         <CardContent className="flex flex-col gap-2 justify-center items-center" >
           <img src={Logo} alt="logo" style={{ width: 60, height: 60 }} />
           <Typography variant="inherit" fontSize={40} component="div">
-            {name}
+            CNS Authenticator
           </Typography>
           <Typography variant="inherit" fontSize={18} className="flex text-center">
             Welcome, Please type here the code we have sent to your phone number

@@ -1,33 +1,36 @@
 import { Box, Button, Card, CardContent, CircularProgress, Typography } from "@mui/material";
 import Logo from './../assets/logo.png'
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { supabase } from "../utils";
 import { useNavigate } from "react-router-dom";
-import { UserType } from "../types/Types";
 
 
 export default function Main() {
 
-  const [loggedUser, setLoggedUser] = useState<UserType>()
+  const [loggedUsername, setLoggedUsername] = useState('')
+  const [loggedEmail, setLoggedEmail] = useState('')
 
   const navigator = useNavigate()
-  useEffect(() => {
-    const getUser = async () => {
-      const { data: { user }, error } = await supabase.auth.getUser()
-      if (error) {
-        console.log('cannot get user, ', error)
-        navigator('/authenticate')
+  
+  const getUser = useCallback(async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (user) {
+        console.log('user: ', user)
+        setLoggedEmail(user.user_metadata.email)
+        setLoggedUsername(user.user_metadata.full_name)
       } else {
-        if (user) {
-          console.log('user: ', user)
-          setLoggedUser(user)
-        } else {
-          console.log('no logged in user yet!')
-        }
+        console.log('no logged in user yet!')
+        navigator('/authenticate')
       }
+    } catch (error) {
+      console.error('Error fetching user:', error);
     }
-    getUser()
-  }, [])
+  }, [navigator]);
+
+  useEffect(() => {
+    getUser();
+  }, [getUser]);
 
   /**
    * logging out
@@ -48,13 +51,13 @@ export default function Main() {
           <img src={Logo} alt="logo" style={{ width: 60, height: 60 }} />
 
           {
-            loggedUser ?
+            loggedEmail && loggedUsername ?
               <>
                 <Typography variant="inherit" fontSize={40} component="div" textAlign='center'>
-                  name
+                  {loggedUsername}
                 </Typography>
                 <Typography variant="inherit" fontSize={22} textAlign='center'>
-                  {loggedUser?.email}
+                  {loggedEmail}
                 </Typography>
 
                 <Typography variant="inherit" fontSize={18} marginTop={4} textAlign='center'>

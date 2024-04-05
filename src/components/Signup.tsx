@@ -2,8 +2,8 @@ import { EmailRounded, Visibility, VisibilityOff } from "@mui/icons-material";
 import { Box, Button, Divider, FormControl, FormHelperText, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField } from "@mui/material";
 import { ChangeEvent, useState } from "react";
 import Logo from './../assets/logo.png'
-import { useNavigate } from "react-router-dom";
 import { supabase } from "../utils";
+import { useNavigate } from "react-router-dom";
 
 const NAME_REGEX = /^[A-Za-z\s]*$/
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -117,7 +117,7 @@ export default function Signup() {
   }
 
   const navigator = useNavigate()
-  
+
   /**
    * form submission
    */
@@ -126,7 +126,24 @@ export default function Signup() {
     event.preventDefault()
     setClicked(true)
     if (isValidName && isValidEmail && isValidPassword && isValidConf) {
-      navigator('/validate')
+      try {
+        const { error } = await supabase.auth.signUp({
+          email: email,
+          password: password,
+          options: {
+            data: {
+              'full_name': name
+            }
+          }
+        })
+        if (!error) {
+          navigator('/verify-email');
+        } else {
+          console.log('could not signup, ', error)
+        }
+      } catch (error) {
+        console.log('could not signup, ', error)
+      }
     } else {
       // nothing
     }
@@ -142,9 +159,8 @@ export default function Signup() {
         redirectTo: 'http://localhost:5173/'
       }
     })
-    if (!error) { console.log('error while logging in, ', error) }
+    if (error) { console.log('error while logging in, ', error) }
   }
-
 
 
   return (
@@ -262,9 +278,9 @@ export default function Signup() {
           sx={{ m: 4 }}
         > Or continue with </Divider>
 
-        <Button 
+        <Button
           variant="outlined" onClick={handleSignupWithGoogle}
-          style={{ borderColor: '#C92A2A', color: '#C92A2A', fontFamily: 'Oswald' }} 
+          style={{ borderColor: '#C92A2A', color: '#C92A2A', fontFamily: 'Oswald' }}
           size="large" startIcon={<EmailRounded />}
         >
           Google Account

@@ -27,6 +27,7 @@ export default function Login() {
    */
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [invalidCreds, setInvalidCreds] = useState(false)
 
   /**
    * form validation
@@ -70,16 +71,29 @@ export default function Login() {
   }
 
   const navigator = useNavigate()
-  
+
   /**
    * form submission
    */
   const [isClicked, setClicked] = useState(false)
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
     setClicked(true)
     if (isValidEmail && isValidPassword) {
-      navigator('/validate')
+      try {
+        const { error } = await supabase.auth.signInWithPassword({
+          email: email,
+          password: password,
+        },)
+        if (!error) {
+          setInvalidCreds(false)
+          navigator('/')
+        } else {
+          setInvalidCreds(true)
+        }
+      } catch (error) {
+        console.log('could not signup, ', error)
+      }
     } else {
       // nothing
     }
@@ -96,7 +110,7 @@ export default function Login() {
         redirectTo: 'http://localhost:5173/'
       }
     })
-    if (error) { 
+    if (error) {
       console.log('error while logging in, ', error)
     }
   }
@@ -120,11 +134,12 @@ export default function Login() {
             placeholder="abbas.basheer@gmail.com"
             value={email}
             onChange={handleEmailChange}
-            error={(!isValidEmail && isFilledEmail) || (isClicked && !isFilledEmail)}
+            error={(!isValidEmail && isFilledEmail) || (isClicked && !isFilledEmail) || invalidCreds}
           />
           {(isFilledEmail && !isValidEmail) &&
             <FormHelperText style={{ color: '#C92A2A' }}>Invalid Email Address</FormHelperText>
           }
+
         </FormControl>
 
         <FormControl variant="outlined">
@@ -148,7 +163,7 @@ export default function Login() {
             label="Password *"
             value={password}
             onChange={handlePasswordChange}
-            error={(!isValidPassword && isFilledPassword) || (isClicked && !isFilledPassword)}
+            error={(!isValidPassword && isFilledPassword) || (isClicked && !isFilledPassword) || invalidCreds}
           />
           {(isFilledPassword && !isValidPassword) &&
             <FormHelperText style={{ color: '#C92A2A', marginLeft: -1 }}>Password must be 8 characters at least that contain one uppercase and special character</FormHelperText>
@@ -161,6 +176,7 @@ export default function Login() {
         >
           Login
         </Button>
+        {invalidCreds && <p style={{ color: '#C92A2A', fontSize: 18, alignSelf: 'center' }}> Invalid Email Address or Password </p>}
         {
           /**
            *    <LoadingButton loading variant="outlined" size="large">
