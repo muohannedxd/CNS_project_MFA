@@ -3,6 +3,7 @@ import { Box, Button, Divider, FormControl, FormHelperText, IconButton, InputAdo
 import { ChangeEvent, useState } from "react";
 import Logo from './../assets/logo.png'
 import { useNavigate } from "react-router-dom";
+import { supabase } from "../utils";
 
 const NAME_REGEX = /^[A-Za-z\s]*$/
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -115,12 +116,13 @@ export default function Signup() {
     }
   }
 
+  const navigator = useNavigate()
+  
   /**
    * form submission
    */
   const [isClicked, setClicked] = useState(false)
-  const navigator = useNavigate()
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
     setClicked(true)
     if (isValidName && isValidEmail && isValidPassword && isValidConf) {
@@ -129,6 +131,20 @@ export default function Signup() {
       // nothing
     }
   }
+
+  /**
+   * sign up with google
+   */
+  const handleSignupWithGoogle = async () => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: 'http://localhost:5173/'
+      }
+    })
+    if (!error) { console.log('error while logging in, ', error) }
+  }
+
 
 
   return (
@@ -246,7 +262,11 @@ export default function Signup() {
           sx={{ m: 4 }}
         > Or continue with </Divider>
 
-        <Button variant="outlined" style={{ borderColor: '#C92A2A', color: '#C92A2A', fontFamily: 'Oswald' }} size="large" startIcon={<EmailRounded />}>
+        <Button 
+          variant="outlined" onClick={handleSignupWithGoogle}
+          style={{ borderColor: '#C92A2A', color: '#C92A2A', fontFamily: 'Oswald' }} 
+          size="large" startIcon={<EmailRounded />}
+        >
           Google Account
         </Button>
 

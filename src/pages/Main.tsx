@@ -1,64 +1,79 @@
 import { Box, Button, Card, CardContent, CircularProgress, Typography } from "@mui/material";
-import { NavLink } from "react-router-dom";
 import Logo from './../assets/logo.png'
 import { useEffect, useState } from "react";
 import { supabase } from "../utils";
+import { useNavigate } from "react-router-dom";
 import { UserType } from "../types/Types";
 
 
 export default function Main() {
 
-  const [users, setUsers] = useState<UserType[]>([]);
+  const [loggedUser, setLoggedUser] = useState<UserType>()
 
+  const navigator = useNavigate()
   useEffect(() => {
-    const getUsers = async () => {
-
-      await new Promise(resolve => setTimeout(resolve, 1000))
-
-      const { data, error } = await supabase.from('User').select('*');
-      if (!error) {
-        setUsers(data || []);
+    const getUser = async () => {
+      const { data: { user }, error } = await supabase.auth.getUser()
+      if (error) {
+        console.log('cannot get user, ', error)
+        navigator('/authenticate')
       } else {
-        console.log('error fetching data: ', error)
+        if (user) {
+          console.log('user: ', user)
+          setLoggedUser(user)
+        } else {
+          console.log('no logged in user yet!')
+        }
       }
-    };
+    }
+    getUser()
+  }, [])
 
-    getUsers();
-  }, []);
+  /**
+   * logging out
+   */
+  const handleLogOut = async () => {
+    const { error } = await supabase.auth.signOut()
+    navigator('/authenticate')
+    if (error) {
+      console.log('error signing out, ', error)
+    }
+  }
+
 
   return (
     <div className="flex justify-center items-center mt-60 sm:mx-8 md:mx-8 lg:mx-60 xl:mx-96">
       <Card sx={{ p: 4, width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <CardContent className="flex flex-col gap-2 justify-center items-center" >
           <img src={Logo} alt="logo" style={{ width: 60, height: 60 }} />
-          {users.length > 0 ? (
-            <div>
-              {
-                users.map((user) => (
-                  <div key={user.id}>
-                    <Typography variant="inherit" fontSize={40} component="div" textAlign='center'>
-                      {user.name}
-                    </Typography>
-                    <Typography variant="inherit" fontSize={22} textAlign='center'>
-                      {user.email}
-                    </Typography>
-                  </div>
-                ))
 
-              }
-              <Typography variant="inherit" fontSize={18} marginTop={4} textAlign='center'>
-                You have been added to the waitlist!
-              </Typography>
-            </div>
-          ) : (
-            <Box sx={{ display: 'flex' }} margin={8}>
-              <CircularProgress sx={{color: '#14152C'}} />
-            </Box>
-          )}
+          {
+            loggedUser ?
+              <>
+                <Typography variant="inherit" fontSize={40} component="div" textAlign='center'>
+                  name
+                </Typography>
+                <Typography variant="inherit" fontSize={22} textAlign='center'>
+                  {loggedUser?.email}
+                </Typography>
 
-          <NavLink to='/' className='mt-6'>
-            <Button variant="contained" style={{ backgroundColor: "#C92A2A", fontFamily: 'Oswald' }} size="large"> Signout </Button>
-          </NavLink>
+                <Typography variant="inherit" fontSize={18} marginTop={4} textAlign='center'>
+                  You have been added to the waitlist!
+                </Typography>
+              </> :
+              <Box sx={{ display: 'flex' }} margin={8}>
+                <CircularProgress sx={{ color: '#14152C' }} />
+              </Box>
+          }
+
+          <Button
+            variant="contained" onClick={handleLogOut}
+            style={{ backgroundColor: "#C92A2A", fontFamily: 'Oswald', marginTop: 26 }}
+            size="large"
+          >
+            Signout
+          </Button>
+
 
         </CardContent>
       </Card>

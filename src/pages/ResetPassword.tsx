@@ -85,7 +85,7 @@ export default function ResetPassword() {
     event.preventDefault()
     setClicked(true)
     if (isValidPassword && isValidConf) {
-      navigator('/main')
+      navigator('/')
     } else {
       // nothing
     }

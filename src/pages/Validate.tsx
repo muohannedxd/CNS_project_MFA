@@ -26,7 +26,7 @@ export default function Validate() {
     event.preventDefault()
     setClicked(true)
     if (otp.length >= 4) {
-      navigator('/main')
+      navigator('/')
     } else {
       // nothing
     }
