@@ -10,5 +10,6 @@ The Front-End of this project was creates using:
 * Material UI
 
 ### Back-End
-About backend:
-* Supabase for Google Account Authentication
+About backend, Supabase (BaaS) for:
+* Gmail Authentication
+* Email with Password (+ verification) authentication
