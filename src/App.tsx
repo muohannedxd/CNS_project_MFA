@@ -12,13 +12,7 @@ import Verified from './pages/Verified';
 export default function App() {
   return (
     <div className="App">
-      <Routes>
-        <Route path='/' element={<Main />}></Route>
-        <Route path='/authenticate' element={<AuthForms />}></Route>
-        <Route path='/verify-email' element={<VerifyEmail />}></Route>
-        <Route path='/verified' element={<Verified />} ></Route>
-        <Route path='*' element={<NoMatch />}></Route>
-      </Routes>
+      <p color='white' style={{color: 'white'}}>Helloooo</p>
     </div>
   )
 }
