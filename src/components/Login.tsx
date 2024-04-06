@@ -87,7 +87,7 @@ export default function Login() {
         },)
         if (!error) {
           setInvalidCreds(false)
-          navigator('/')
+          navigator('/validate')
         } else {
           setInvalidCreds(true)
         }
@@ -103,7 +103,7 @@ export default function Login() {
   /**
   * sign up with google
   */
-  const handleSignupWithGoogle = async () => {
+  const handleLoginWithGoogle = async () => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
@@ -190,7 +190,7 @@ export default function Login() {
         > Or continue with </Divider>
 
         <Button
-          variant="outlined" onClick={handleSignupWithGoogle}
+          variant="outlined" onClick={handleLoginWithGoogle}
           style={{ borderColor: '#C92A2A', color: '#C92A2A', fontFamily: 'Oswald' }}
           size="large" startIcon={<EmailRounded />}>
           Google Account
