@@ -35,7 +35,7 @@ export default function VerifyEmail() {
             CNS Authenticator
           </Typography>
           <Typography variant="inherit" fontSize={18} className="flex text-center">
-            An e-mail is sent to your Mailbox. Please, confirm your signup
+            An e-mail is sent to your Mailbox. Please, confirm your authentication
           </Typography>
 
         </CardContent>

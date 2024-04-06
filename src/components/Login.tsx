@@ -81,18 +81,29 @@ export default function Login() {
     setClicked(true)
     if (isValidEmail && isValidPassword) {
       try {
+        // 1. Password verification
         const { error } = await supabase.auth.signInWithPassword({
           email: email,
           password: password,
         },)
-        if (!error) {
-          setInvalidCreds(false)
-          navigator('/validate')
-        } else {
+        if (error) {
           setInvalidCreds(true)
+        } else {
+          setInvalidCreds(false)
+          
+          // 2. Email verification
+          await supabase.auth.signInWithOtp({
+            email: email,
+            options: {
+              emailRedirectTo: 'http://localhost:5173/'
+            }
+          })
+
+          navigator('/verify-email')
         }
+
       } catch (error) {
-        console.log('could not signup, ', error)
+        console.log('could not login, ', error)
       }
     } else {
       // nothing
@@ -103,11 +114,11 @@ export default function Login() {
   /**
   * sign up with google
   */
-  const handleLoginWithGoogle = async () => {
+  const handleSignInWithGoogle = async () => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: 'http://localhost:5173/'
+        redirectTo: 'http://localhost:5173/',
       }
     })
     if (error) {
@@ -190,7 +201,7 @@ export default function Login() {
         > Or continue with </Divider>
 
         <Button
-          variant="outlined" onClick={handleLoginWithGoogle}
+          variant="outlined" onClick={handleSignInWithGoogle}
           style={{ borderColor: '#C92A2A', color: '#C92A2A', fontFamily: 'Oswald' }}
           size="large" startIcon={<EmailRounded />}>
           Google Account
