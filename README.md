@@ -13,3 +13,6 @@ The Front-End of this project was creates using:
 About backend, Supabase (BaaS) for:
 * Gmail Authentication
 * Email with Password (+ verification) authentication
+
+### Link
+* https://cns-project-mfa.vercel.app/#
