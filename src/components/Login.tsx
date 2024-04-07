@@ -95,7 +95,7 @@ export default function Login() {
           await supabase.auth.signInWithOtp({
             email: email,
             options: {
-              emailRedirectTo: 'http://localhost:5173/'
+              emailRedirectTo: 'https://cns-project-mfa.vercel.app/'
             }
           })
 
@@ -118,7 +118,7 @@ export default function Login() {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: 'http://localhost:5173/',
+        redirectTo: 'https://cns-project-mfa.vercel.app/',
       }
     })
     if (error) {

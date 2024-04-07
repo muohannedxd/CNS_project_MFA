@@ -156,7 +156,7 @@ export default function Signup() {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: 'http://localhost:5173/'
+        redirectTo: 'https://cns-project-mfa.vercel.app/'
       }
     })
     if (error) { console.log('error while logging in, ', error) }
